@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Buycreds from "./Buycredform";
+import Credential from "./Credential";
+import Error from "./Error";
+import Login from "./Loginform";
+import Signup from "./Signupform";
+import Topup from "./Topupform";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Credentials Marketplace</h1>
+      <h3>Placeholder - Current</h3>
+      <Login />
+      <Signup />
+      <Credential />
+      <Buycreds />
+      <Error />
+      <Topup />
     </div>
   );
 }
