@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
+import { useAuth } from "./contexts/AuthContext";
 
 const Signup = () => {
+  const { signup } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [passConf, setPassConf] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+
   let handleSubmit = async (e) => {
     e.preventDefault();
     if (pass === passConf) {
@@ -15,29 +18,39 @@ const Signup = () => {
       try {
         //   console.log(email, pass);
         //   console.log(body);
-        let res = await fetch("/register", {
+        // let res = await fetch("/register", {
+        //   method: "POST",
+        //   body: JSON.stringify({
+        //     name: name,
+        //     email: email,
+        //     pass: pass,
+        //   }),
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // });
+        // let message = await res.json();
+        // if (res.json) {
+        //   setErr(message);
+        // }
+        await signup(email, pass);
+        let req = await fetch("/register", {
           method: "POST",
-          body: JSON.stringify({
-            name: name,
-            email: email,
-            pass: pass,
-          }),
+          body: JSON.stringify({ name: name, email, email }),
           headers: {
             "Content-Type": "application/json",
           },
         });
-        let message = await res.json();
-        if (res.json) {
-          setErr(message);
-        }
       } catch (e) {
-        setErr(e);
+        setErr(e.message);
+        console.log(e.message);
       }
       setLoading(false);
     } else {
       setErr("Passwords do not match");
     }
   };
+
   return (
     <>
       <h2 className="text-center mb-4">Sign Up</h2>
@@ -88,6 +101,7 @@ const Signup = () => {
           Sign Up
         </Button>
       </Form>
+      <div className="w-100 text-center">Already have an account? Login</div>
     </>
   );
 };

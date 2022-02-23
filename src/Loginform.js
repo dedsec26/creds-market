@@ -49,6 +49,7 @@ const Login = () => {
           Log in
         </Button>
       </Form>
+      <div className="w-100 text-center">Don't have an account? Signup</div>
     </>
   );
 };
