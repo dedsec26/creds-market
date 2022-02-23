@@ -19,9 +19,9 @@ const Credential = () => {
   };
 
   return (
-    <div className="creds">
-      <p>Placeholder - Email</p>
-      <p>Placeholder - Password</p>
+    <>
+      <h5 className="mb-2">Placeholder - Email</h5>
+      <h5 className="">Placeholder - Password</h5>
 
       {creds.map((cred) => (
         <div className="cred" key={cred.id}>
@@ -30,7 +30,7 @@ const Credential = () => {
         </div>
       ))}
       <button onClick={showMore}>Click Me</button>
-    </div>
+    </>
   );
 };
 

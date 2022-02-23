@@ -20,9 +20,7 @@ function App() {
             <Card.Body>
               <h2 className="text-center mb-4">Credentials Marketplace</h2>
               <Credential />
-              <Buycreds />
               <Error />
-              <Topup />
             </Card.Body>
           </Card>
         </div>
