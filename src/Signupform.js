@@ -1,39 +1,47 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Alert } from "react-bootstrap";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [passConf, setPassConf] = useState("");
+  const [err, setErr] = useState(null);
+  const [loading, setLoading] = useState(false);
   let handleSubmit = async (e) => {
     e.preventDefault();
-    if (pass) {
-    }
-    try {
-      //   console.log(email, pass);
-      //   console.log(body);
-      let res = await fetch("/register", {
-        method: "POST",
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          pass: pass,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      let message = await res.json();
-      if (res.json) {
-        console.log(message);
+    if (pass === passConf) {
+      setLoading(true);
+      try {
+        //   console.log(email, pass);
+        //   console.log(body);
+        let res = await fetch("/register", {
+          method: "POST",
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            pass: pass,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        let message = await res.json();
+        if (res.json) {
+          setErr(message);
+        }
+      } catch (e) {
+        setErr(e);
       }
-    } catch (e) {
-      console.log(e);
+      setLoading(false);
+    } else {
+      setErr("Passwords do not match");
     }
   };
   return (
     <>
+      <h2 className="text-center mb-4">Sign Up</h2>
+      {err && <Alert variant="danger">{err}</Alert>}
       <Form>
         <Form.Group id="name">
           <Form.Label>Name</Form.Label>
@@ -63,7 +71,7 @@ const Signup = () => {
           />
         </Form.Group>
         <Form.Group id="password-conf">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type="password"
             required
@@ -71,34 +79,15 @@ const Signup = () => {
             onChange={(e) => setPassConf(e.target.value)}
           />
         </Form.Group>
-        <Button className="w-100 my-3" type="submit" onClick={handleSubmit}>
-          Log in
+        <Button
+          className="w-100 my-3"
+          type="submit"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          Sign Up
         </Button>
       </Form>
-      <form action="">
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label htmlFor="pass">Password</label>
-        <input
-          type="text"
-          id="pass"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
-        />
-        <button onClick={handleSubmit}>Submit</button>
-      </form>
     </>
   );
 };

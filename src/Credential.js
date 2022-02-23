@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const Credential = () => {
   const [creds, setCreds] = useState([
     { email: "test@test.com", pass: "123", id: 1 },
