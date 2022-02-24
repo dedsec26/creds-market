@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Card, Container } from "react-bootstrap";
 import { AuthProvider } from "./contexts/AuthContext";
 import Dashboard from "./Dashboard";
+import PrivateRoute from "./PrivateRoute";
+import CheckAuth from "./CheckAuth";
 
 function App() {
   return (
@@ -24,11 +26,47 @@ function App() {
             <Router>
               <AuthProvider>
                 <Routes>
-                  <Route path="/" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/dash" element={<Dashboard />} />
-                  <Route path="/credentials" element={<Buycreds />} />
-                  <Route path="/topup" element={<Topup />} />
+                  <Route
+                    path="/"
+                    element={
+                      <CheckAuth>
+                        <Login />
+                      </CheckAuth>
+                    }
+                  />
+                  <Route
+                    path="/signup"
+                    element={
+                      <CheckAuth>
+                        <Signup />
+                      </CheckAuth>
+                    }
+                  />
+
+                  <Route
+                    path="/dash"
+                    element={
+                      <PrivateRoute>
+                        <Dashboard />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/credentials"
+                    element={
+                      <PrivateRoute>
+                        <Buycreds />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/topup"
+                    element={
+                      <PrivateRoute>
+                        <Topup />
+                      </PrivateRoute>
+                    }
+                  />
                 </Routes>
               </AuthProvider>
             </Router>
