@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Button, Form, Alert } from "react-bootstrap";
+
+import { useAuth } from "./contexts/AuthContext";
 
 const Buycreds = () => {
   const [amount, setAmount] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState();
+  const { currentUser } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -14,8 +18,7 @@ const Buycreds = () => {
         method: "POST",
         body: JSON.stringify({
           creds: amount,
-          email: "aftocr@gmail.com",
-          pass: "admin",
+          email: currentUser.email,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -35,10 +38,31 @@ const Buycreds = () => {
     }
     setLoading(false);
   };
+  useEffect(() => {
+    let fetchData = async (currentUser) => {
+      try {
+        let res = await fetch("/data/" + currentUser.email, {
+          method: "GET",
+        });
+        let message = await res.json();
+        let temp = message;
+        // console.log("temp: ", temp);
+        await setUserData(temp);
+        // console.log("userData:", userData);
+        return message;
+      } catch (e) {
+        setErr(e);
+      }
+    };
+    fetchData(currentUser);
+
+    // setUserData(message);
+    // console.log(userData);
+  }, []);
   return (
     <>
       <h2 className="text-center mb-4">Buy Credentials</h2>
-      <h2 className="text-center mb-4">Hi Name!!!</h2>
+      <h2 className="text-center mb-4">Hi {userData.name}!!!</h2>
       {err && <Alert variant="danger">{err}</Alert>}
       <Form>
         <Form.Group id="credentials">
