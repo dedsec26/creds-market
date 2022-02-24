@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Alert } from "react-bootstrap";
 
 import { useAuth } from "./contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [err, setErr] = useState(null);
@@ -37,6 +37,7 @@ const Dashboard = () => {
       >
         Logout
       </Button>
+      <Link to={"/topup"}> Top Up</Link>
     </>
   );
 };

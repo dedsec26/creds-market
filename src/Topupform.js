@@ -1,42 +1,68 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
+import { useAuth } from "./contexts/AuthContext";
 const Topup = () => {
   const [amount, setAmount] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState();
+  const { currentUser } = useAuth();
+  // console.log(currentUser.email);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // console.log("userData:", userData);
+
     setLoading(true);
-    try {
-      let res = await fetch("/tokens/add", {
+    if (currentUser) {
+      let req = await fetch("/tokens/add", {
         method: "POST",
         body: JSON.stringify({
+          id: userData._id,
           amount: amount,
-          email: "aftocr@gmail.com",
-          pass: "admin",
         }),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      let message = await res.json();
-      // console.log(typeof message);
-      if (res.json && typeof message === "object") {
-        for (const iterator of message) {
-          // setErr(iterator.email);
-          setErr(iterator.pass);
-          console.log(iterator);
-        }
-      } else setErr(message);
-    } catch (e) {
-      setErr(e);
-    }
+      let res = await req.json();
+      console.log(res);
+      setErr(JSON.stringify(res));
+    } else setErr("Please login first...");
+
     setLoading(false);
   };
+
+  useEffect(() => {
+    let fetchData = async (currentUser) => {
+      try {
+        let res = await fetch("/data/" + currentUser.email, {
+          method: "GET",
+        });
+        let message = await res.json();
+        let temp = message;
+        // console.log("temp: ", temp);
+        await setUserData(temp);
+        // console.log("userData:", userData);
+        return message;
+      } catch (e) {
+        setErr(e);
+      }
+    };
+    fetchData(currentUser);
+
+    // setUserData(message);
+    // console.log(userData);
+  }, []);
   return (
     <>
+      {/* <h2 className="text-center mb-4">{currentUser.email}</h2> */}
       <h2 className="text-center mb-4">Buy Credits</h2>
-      <h2 className="text-center mb-4">Hi Name!!!</h2>
+
+      {userData && (
+        <h2 className="text-center mb-4">
+          Hi {userData.name}!!! You have {userData.tokens} tokens in account
+        </h2>
+      )}
       {err && <Alert variant="danger">{err}</Alert>}
       <Form>
         <Form.Group id="credits">
