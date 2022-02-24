@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import { useAuth } from "./contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 const Signup = () => {
   const { signup } = useAuth();
@@ -36,14 +37,14 @@ const Signup = () => {
         await signup(email, pass);
         let req = await fetch("/register", {
           method: "POST",
-          body: JSON.stringify({ name: name, email, email }),
+          body: JSON.stringify({ name: name, email: email }),
           headers: {
             "Content-Type": "application/json",
           },
         });
       } catch (e) {
         setErr(e.message);
-        console.log(e.message);
+        // console.log(e.message);
       }
       setLoading(false);
     } else {
@@ -101,7 +102,9 @@ const Signup = () => {
           Sign Up
         </Button>
       </Form>
-      <div className="w-100 text-center">Already have an account? Login</div>
+      <div className="w-100 text-center">
+        Already have an account? <Link to={"/"}> Login</Link>
+      </div>
     </>
   );
 };

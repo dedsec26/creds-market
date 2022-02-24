@@ -1,25 +1,32 @@
 import { useState } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
+import { useAuth } from "./contexts/AuthContext";
+import { Link } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [err, setErr] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   let handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
-      let res = await fetch("/login", {
-        method: "POST",
-        body: JSON.stringify({
-          email: email,
-          pass: pass,
-        }),
-      });
-      let message = await res.json();
-      if (res.json) {
-        setErr(message);
-      }
+      //   let res = await fetch("/login", {
+      //     method: "POST",
+      //     body: JSON.stringify({
+      //       email: email,
+      //       pass: pass,
+      //     }),
+      //   });
+      //   let message = await res.json();
+      //   if (res.json) {
+      //     setErr(message);
+      //   }
+      await login(email, pass);
     } catch (e) {
-      setErr(e);
+      setErr(e.message);
+      setLoading(false);
     }
   };
   return (
@@ -45,11 +52,18 @@ const Login = () => {
             onChange={(e) => setPass(e.target.value)}
           />
         </Form.Group>
-        <Button className="w-100 my-3" type="submit" onClick={handleSubmit}>
+        <Button
+          className="w-100 my-3"
+          type="submit"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
           Log in
         </Button>
       </Form>
-      <div className="w-100 text-center">Don't have an account? Signup</div>
+      <div className="w-100 text-center">
+        Don't have an account? <Link to={"/signup"}> Sign Up</Link>
+      </div>
     </>
   );
 };
