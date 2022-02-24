@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import { useAuth } from "./contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const navigate = useNavigate();
   let handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -24,6 +25,7 @@ const Login = () => {
       //     setErr(message);
       //   }
       await login(email, pass);
+      navigate("/dash");
     } catch (e) {
       setErr(e.message);
       setLoading(false);

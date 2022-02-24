@@ -2,14 +2,21 @@ import { useState } from "react";
 
 import { Button, Alert } from "react-bootstrap";
 
+import { useAuth } from "./contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 const Dashboard = () => {
-  const [amount, setAmount] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
-  const handleSubmit = async (e) => {
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      await logout();
+      navigate("/");
+      window.location.reload();
     } catch (e) {
       setErr(e);
     }
@@ -18,13 +25,13 @@ const Dashboard = () => {
   return (
     <>
       <h2 className="text-center mb-4">Buy Credentials</h2>
-      <h2 className="text-center mb-4">Hi Name!!!</h2>
+      <h2 className="text-center mb-4">Hi {currentUser.email}!!!</h2>
       {err && <Alert variant="danger">{err}</Alert>}
 
       <Button
         className="w-100 my-3"
         type="submit"
-        onClick={handleSubmit}
+        onClick={handleLogout}
         disabled={loading}
         variant="link"
       >
