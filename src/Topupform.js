@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import { useAuth } from "./contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 const Topup = () => {
   const [amount, setAmount] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState();
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   // console.log(currentUser.email);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ const Topup = () => {
     } else setErr("Please login first...");
 
     setLoading(false);
+    navigate("/dash");
   };
 
   useEffect(() => {

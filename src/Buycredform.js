@@ -8,8 +8,9 @@ const Buycreds = () => {
   const [amount, setAmount] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState({});
   const { currentUser } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -18,7 +19,7 @@ const Buycreds = () => {
         method: "POST",
         body: JSON.stringify({
           creds: amount,
-          email: currentUser.email,
+          id: userData._id,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -26,18 +27,15 @@ const Buycreds = () => {
       });
       let message = await res.json();
       // console.log(typeof message);
-      if (res.json && typeof message === "object") {
-        for (const iterator of message) {
-          // setErr(iterator.email);
-          setErr(iterator.pass);
-          console.log(iterator);
-        }
-      } else setErr(message);
+      if (message.status === 400) {
+        setErr(message.message);
+      } else setErr(JSON.stringify(message));
     } catch (e) {
       setErr(e);
     }
     setLoading(false);
   };
+
   useEffect(() => {
     let fetchData = async (currentUser) => {
       try {
@@ -58,7 +56,8 @@ const Buycreds = () => {
 
     // setUserData(message);
     // console.log(userData);
-  }, []);
+  }, [currentUser]);
+
   return (
     <>
       <h2 className="text-center mb-4">Buy Credentials</h2>
