@@ -1,36 +1,19 @@
-import { useState, useEffect } from "react";
-const Credential = () => {
-  const [creds, setCreds] = useState([
-    { email: "test@test.com", pass: "123", id: 1 },
-    { email: "test2@test.com", pass: "asf", id: 2 },
-    { email: "test3@test.com", pass: "zxc", id: 3 },
-    { email: "aflal@test.com", pass: "qaz", id: 4 },
-  ]);
-
-  const showMore = () => {
-    // let newCreds = creds;
-    // newCreds.push({ email: "new", pass: "new", id: "5" });
-    // newCreds.pop();
-    // console.log(newCreds);
-    // console.log(typeof newCreds);
-    // console.log(typeof creds);
-    let new1 = [{ email: "new", pass: "new", id: 5 }];
-    setCreds(new1);
-    // setCreds(newCreds);
-  };
+const Credential = (props) => {
+  const { data } = props;
 
   return (
     <>
-      <h5 className="mb-2">Placeholder - Email</h5>
-      <h5 className="">Placeholder - Password</h5>
-
-      {creds.map((cred) => (
+      {/* <h5 className="mb-2">Placeholder - Email</h5>
+      <h5 className="">Placeholder - Password</h5> */}
+      <h4>Credentials you requested are below:</h4>
+      <hr />
+      {data.map((cred) => (
         <div className="cred" key={cred.id}>
-          <h3>{cred.email}</h3>
-          <h4>{cred.pass}</h4>
+          <h5>Email: {cred.email}</h5>
+          <h5>Password: {cred.pass}</h5>
+          <hr />
         </div>
       ))}
-      <button onClick={showMore}>Click Me</button>
     </>
   );
 };
