@@ -43,10 +43,9 @@ const Dashboard = () => {
 
     // setUserData(message);
     // console.log(userData);
-  }, []);
+  }, [currentUser]);
   return (
     <>
-      <h2 className="text-center mb-4">Buy Credentials</h2>
       <h2 className="text-center mb-4">Hi {userData.name}!!!</h2>
       {/* {console.log(userData)} */}
       {err && <Alert variant="danger">{err}</Alert>}
@@ -66,7 +65,6 @@ const Dashboard = () => {
       >
         Logout
       </Button>
-      <Link to={"/topup"}> Top Up</Link>
     </>
   );
 };

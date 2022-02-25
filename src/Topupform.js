@@ -55,16 +55,16 @@ const Topup = () => {
 
     // setUserData(message);
     // console.log(userData);
-  }, []);
+  }, [currentUser]);
   return (
     <>
       {/* <h2 className="text-center mb-4">{currentUser.email}</h2> */}
       <h2 className="text-center mb-4">Buy Credits</h2>
 
       {userData && (
-        <h2 className="text-center mb-4">
-          Hi {userData.name}!!! You have {userData.tokens} tokens in account
-        </h2>
+        <h3 className="text-center mb-4">
+          Hi {userData.name}!!! You have {userData.tokens} credits in account
+        </h3>
       )}
       {err && <Alert variant="danger">{err}</Alert>}
       <Form>

@@ -1,5 +1,4 @@
 import Buycreds from "./Buycredform";
-import Credential from "./Credential";
 import Error from "./Error";
 import Login from "./Loginform";
 import Signup from "./Signupform";
@@ -59,7 +58,6 @@ function App() {
                       </PrivateRoute>
                     }
                   />
-                  {/* <Route path="/topup" element={<Topup />} /> */}
                   <Route
                     path="/topup"
                     element={
@@ -68,6 +66,7 @@ function App() {
                       </PrivateRoute>
                     }
                   />
+                  <Route path="*" element={<Error />} />
                 </Routes>
               </AuthProvider>
             </Router>
