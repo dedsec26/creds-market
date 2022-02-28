@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import { useAuth } from "./contexts/AuthContext";
 import { Link } from "react-router-dom";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "./firebase";
 
 const Signup = () => {
   const { signup } = useAuth();
@@ -13,10 +15,18 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   let handleSubmit = async (e) => {
+    // console.log("submitted");
+
     e.preventDefault();
     if (pass === passConf) {
       setLoading(true);
       try {
+        const docRef = await addDoc(collection(db, "users"), {
+          name: name,
+          email: email,
+          credits: 3,
+        });
+        console.log("here", docRef);
         //   console.log(email, pass);
         //   console.log(body);
         // let res = await fetch("/register", {
@@ -35,16 +45,17 @@ const Signup = () => {
         //   setErr(message);
         // }
         await signup(email, pass);
-        let req = await fetch("/register", {
-          method: "POST",
-          body: JSON.stringify({ name: name, email: email }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+
+        // let req = await fetch("/register", {
+        //   method: "POST",
+        //   body: JSON.stringify({ name: name, email: email }),
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // });
       } catch (e) {
         setErr(e.message);
-        // console.log(e.message);
+        console.log(e);
       }
       setLoading(false);
     } else {

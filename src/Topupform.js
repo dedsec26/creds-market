@@ -2,12 +2,24 @@ import { useState, useEffect } from "react";
 import { Button, Form, Alert } from "react-bootstrap";
 import { useAuth } from "./contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "./firebase";
 const Topup = () => {
   const [amount, setAmount] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState();
+  const [id, setId] = useState();
   const { currentUser } = useAuth();
+  const userRef = collection(db, "users");
+
   const navigate = useNavigate();
   // console.log(currentUser.email);
   const handleSubmit = async (e) => {
@@ -16,19 +28,10 @@ const Topup = () => {
 
     setLoading(true);
     if (currentUser) {
-      let req = await fetch("/tokens/add", {
-        method: "POST",
-        body: JSON.stringify({
-          id: userData._id,
-          amount: amount,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      let res = await req.json();
-      console.log(res);
-      setErr(JSON.stringify(res));
+      let userDoc = doc(db, "users", id);
+
+      let newAmount = { credits: userData.credits + parseInt(amount) };
+      await updateDoc(userDoc, newAmount);
     } else setErr("Please login first...");
 
     setLoading(false);
@@ -38,15 +41,16 @@ const Topup = () => {
   useEffect(() => {
     let fetchData = async (currentUser) => {
       try {
-        let res = await fetch("/data/" + currentUser.email, {
-          method: "GET",
+        const q = query(userRef, where("email", "==", currentUser.email));
+        const doc = await getDocs(q);
+        // console.log(typeof doc);
+        doc.forEach((d) => {
+          // console.log(d.id);
+          //   console.log(d.data());
+          const stuff = d.data();
+          setUserData(stuff);
+          setId(d.id);
         });
-        let message = await res.json();
-        let temp = message;
-        // console.log("temp: ", temp);
-        await setUserData(temp);
-        // console.log("userData:", userData);
-        return message;
       } catch (e) {
         setErr(e);
       }
