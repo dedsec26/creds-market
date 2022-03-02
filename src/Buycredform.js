@@ -8,6 +8,7 @@ import {
   where,
   doc,
   updateDoc,
+  limit,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -23,6 +24,7 @@ const Buycreds = () => {
   const [data, setData] = useState({});
   const { currentUser } = useAuth();
   const userRef = collection(db, "users");
+  const credRef = collection(db, "creds");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,13 +48,26 @@ const Buycreds = () => {
       //   setResult(true);
       //   setData(message);
       // }
-      let userDoc = doc(db, "users", userData.id);
-      let newAmount = { credits: userData.credits + amount };
-      const res = await updateDoc(userDoc, newAmount);
-      if (res)
-        setResult(
-          `You have added ${amount} credits and now you have ${newAmount} credits in total.`
-        );
+      const q = query(credRef, where("status", "==", true), limit(amount));
+      const docs = await getDocs(q);
+      setData(docs);
+      // console.log(data);
+      docs.forEach(async (d) => {
+        //   console.log(d.id);
+        //   console.log(d.data());
+        // const stuff = d.data();
+        let newDoc = doc(db, "creds", d.id);
+        let newStatus = { status: false };
+        console.log("here");
+        // await updateDoc(newDoc, newStatus);
+      });
+      // let userDoc = doc(db, "users", userData.id);
+      // let newAmount = { credits: userData.credits + amount };
+      // const res = await updateDoc(userDoc, newAmount);
+      // if (res)
+      //   setResult(
+      //     `You have added ${amount} credits and now you have ${newAmount} credits in total.`
+      //   );
     } catch (e) {
       setErr(e);
     }

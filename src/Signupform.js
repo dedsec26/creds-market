@@ -21,12 +21,12 @@ const Signup = () => {
     if (pass === passConf) {
       setLoading(true);
       try {
-        const docRef = await addDoc(collection(db, "users"), {
-          name: name,
-          email: email,
-          credits: 3,
-        });
-        console.log("here", docRef);
+        // const docRef = await addDoc(collection(db, "users"), {
+        //   name: name,
+        //   email: email,
+        //   credits: 3,
+        // });
+        // console.log("here", docRef);
         //   console.log(email, pass);
         //   console.log(body);
         // let res = await fetch("/register", {
@@ -44,7 +44,7 @@ const Signup = () => {
         // if (res.json) {
         //   setErr(message);
         // }
-        await signup(email, pass);
+        await signup(email, pass, name);
 
         // let req = await fetch("/register", {
         //   method: "POST",

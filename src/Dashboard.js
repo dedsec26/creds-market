@@ -35,18 +35,31 @@ const Dashboard = () => {
         // // console.log("temp: ", temp);
         // await setUserData(temp);
         // // console.log("userData:", userData);
-        const userRef = collection(db, "users");
-        const q = query(userRef, where("email", "==", currentUser.email));
-        const doc = await getDocs(q);
-        // console.log(typeof doc);
-        doc.forEach((d) => {
-          //   console.log(d.id);
-          //   console.log(d.data());
-          const stuff = d.data();
-          setUserData(stuff);
-        });
+        // const userRef = collection(db, "users");
+        // const q = query(userRef, where("email", "==", currentUser.email));
+        // console.log(currentUser.uid);
+        // console.log(currentUser.displayName);
+        let res = await fetch(
+          "https://us-central1-creds-market.cloudfunctions.net/data?uid=" +
+            currentUser.uid,
+          {
+            method: "GET",
+          }
+        );
+        let message = await res.json();
+        message.name = currentUser.displayName;
+        setUserData(message);
+        // console.log(userData);
+        // const doc = await getDocs(q);
+        // // console.log(typeof doc);
+        // doc.forEach((d) => {
+        //   //   console.log(d.id);
+        //   //   console.log(d.data());
+        //   const stuff = d.data();
+        //   setUserData(stuff);
+        // });
 
-        console.log(userData);
+        // console.log(userData);
         // return message;
       } catch (e) {
         setErr(e);
