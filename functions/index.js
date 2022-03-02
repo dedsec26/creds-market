@@ -1,5 +1,15 @@
 const functions = require("firebase-functions");
-
+// const { initalizeApp, applicationDefault } = require("firebase-admin/app");
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+const ad = require("firebase-admin")
+// const { db } = require("../src/firebase");
+// const { getFirestore } = require("firebase/firestore");
+// import { addDoc, collection } from "firebase/firestore";
+const 
+admin.initializeApp();
+// initalizeApp()
+const db = getFirestore()
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -35,3 +45,21 @@ exports.scheduer = functions.pubsub
 //     res.json(`You succesfully added ${req.body.amount} tokens!!!`);
 //   }
 // });
+
+exports.signup = functions.auth.user().onCreate((user) => {
+  // const docRef = await addDoc(collection(db, "users"), {
+  //   name: "name",
+  //   email: user.email,
+  //   credits: 3,
+  // });
+  // console.log(await user.email);
+  const docRef = db.collection("users")
+  const docs = await docRef.get()
+  if (!docs.exists) {
+    console.log('No such document!');
+  } else {
+    console.log('Document data:', docs.data());
+  }
+});
+
+
